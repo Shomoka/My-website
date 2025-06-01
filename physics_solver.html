@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أداة حل مسائل الفيزياء الشاملة</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .physics-sections {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-2px);
+            border-color: #2196F3;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section h3 {
+            color: #2196F3;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e3f2fd;
+            padding-bottom: 10px;
+        }
+        
+        .formula {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-right: 4px solid #2196F3;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+        
+        .formula-title {
+            font-weight: bold;
+            color: #1976D2;
+            margin-bottom: 5px;
+        }
+        
+        .calculator {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+        
+        .calculator h3 {
+            color: #2196F3;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.3em;
+        }
+        
+        .calc-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .calc-section label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .calc-section input, .calc-section select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .calc-section input:focus, .calc-section select:focus {
+            outline: none;
+            border-color: #2196F3;
+        }
+        
+        .calc-btn {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            width: 100%;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .calc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+        
+        .result {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .constants {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .constants h4 {
+            color: #f57c00;
+            margin-bottom: 10px;
+        }
+        
+        .constant {
+            font-family: 'Courier New', monospace;
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: #5d4037;
+        }
+        
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator {
+                position: static;
+            }
+        }
+        
+        .units {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .example {
+            background: #e8f5e8;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border-right: 3px solid #4CAF50;
+        }
+        
+        .example-title {
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 أداة حل مسائل الفيزياء الشاملة</h1>
+            <p>جميع القوانين الفيزيائية مع حاسبة تفاعلية</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="physics-sections">
+                <!-- الميكانيكا الكلاسيكية -->
+                <div class="section">
+                    <h3>⚡ الميكانيكا الكلاسيكية</h3>
+                    
+                    <div class="formula">
+                        <div class="formula-title">قانون نيوتن الثاني:</div>
+                        F = ma
+                        <div class="units">حيث F القوة (نيوتن), m الكتلة (كجم), a التسارع (م/ث²)</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">معادلات الحركة:</div>
+                        v = u + at<br>
+                        s = ut + ½at²<br>
+                        v² = u² + 2as
+                        <div class="units">حيث v السرعة النهائية, u السرعة الابتدائية, s المسافة, t الزمن</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">الزخم:</div>
+                        p = mv
+                        <div class="units">حيث p الزخم (كجم.م/ث), m الكتلة, v السرعة</div>
+                    </div>
+                    
+                    <div class="example">
+                        <div class="example-title">مثال:</div>
+                        سيارة كتلتها 1000 كجم تتسارع بمعدل 2 م/ث². ما القوة المطلوبة؟<br>
+                        الحل: F = ma = 1000 × 2 = 2000 نيوتن
+                    </div>
+                </div>
+                
+                <!-- الطاقة والشغل -->
+                <div class="section">
+                    <h3>⚡ الطاقة والشغل</h3>
+                    
+                    <div class="formula">
+                        <div class="formula-title">الشغل:</div>
+                        W = F × d × cos(θ)
+                        <div class="units">حيث W الشغل (جول), F القوة, d المسافة, θ الزاوية</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">الطاقة الحركية:</div>
+                        KE = ½mv²
+                        <div class="units">حيث KE الطاقة الحركية (جول)</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">الطاقة الكامنة:</div>
+                        PE = mgh
+                        <div class="units">حيث PE الطاقة الكامنة, g التسارع الأرضي (9.8 م/ث²), h الارتفاع</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">القدرة:</div>
+                        P = W/t = F × v
+                        <div class="units">حيث P القدرة (واط), t الزمن</div>
+                    </div>
+                </div>
+                
+                <!-- الكهرباء والمغناطيسية -->
+                <div class="section">
+                    <h3>⚡ الكهرباء والمغناطيسية</h3>
+                    
+                    <div class="formula">
+                        <div class="formula-title">قانون أوم:</div>
+                        V = IR
+                        <div class="units">حيث V الجهد (فولت), I التيار (أمبير), R المقاومة (أوم)</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">القدرة الكهربائية:</div>
+                        P = VI = I²R = V²/R
+                        <div class="units">حيث P القدرة (واط)</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">قانون كولوم:</div>
+                        F = k(q₁q₂)/r²
+                        <div class="units">حيث k = 9×10⁹ ن.م²/ك², q الشحنة, r المسافة</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">السعة الكهربائية:</div>
+                        C = Q/V
+                        <div class="units">حيث C السعة (فاراد), Q الشحنة</div>
+                    </div>
+                </div>
+                
+                <!-- الموائع -->
+                <div class="section">
+                    <h3>💧 الموائع</h3>
+                    
+                    <div class="formula">
+                        <div class="formula-title">قانون برنولي:</div>
+                        P₁ + ½ρv₁² + ρgh₁ = P₂ + ½ρv₂² + ρgh₂
+                        <div class="units">حيث P الضغط, ρ الكثافة, v السرعة, h الارتفاع</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">الضغط:</div>
+                        P = F/A = ρgh
+                        <div class="units">حيث A المساحة</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">قانون أرخميدس:</div>
+                        F_b = ρ_fluid × V_displaced × g
+                        <div class="units">حيث F_b قوة الطفو, V_displaced الحجم المزاح</div>
+                    </div>
+                </div>
+                
+                <!-- الحرارة والديناميكا الحرارية -->
+                <div class="section">
+                    <h3>🌡️ الحرارة والديناميكا الحرارية</h3>
+                    
+                    <div class="formula">
+                        <div class="formula-title">السعة الحرارية:</div>
+                        Q = mcΔT
+                        <div class="units">حيث Q الحرارة (جول), c السعة الحرارية النوعية, ΔT تغير الحرارة</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">القانون الأول للديناميكا الحرارية:</div>
+                        ΔU = Q - W
+                        <div class="units">حيث ΔU تغير الطاقة الداخلية</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">قانون الغازات المثالية:</div>
+                        PV = nRT
+                        <div class="units">حيث n عدد المولات, R ثابت الغازات (8.314 ج/مول.ك)</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">كفاءة آلة كارنو:</div>
+                        η = 1 - T_cold/T_hot
+                        <div class="units">حيث T الحرارة المطلقة (كالفن)</div>
+                    </div>
+                </div>
+                
+                <!-- الموجات والذبذبات -->
+                <div class="section">
+                    <h3>🌊 الموجات والذبذبات</h3>
+                    
+                    <div class="formula">
+                        <div class="formula-title">سرعة الموجة:</div>
+                        v = fλ
+                        <div class="units">حيث f التردد (هرتز), λ الطول الموجي (متر)</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">الحركة التوافقية البسيطة:</div>
+                        x = A cos(ωt + φ)
+                        <div class="units">حيث A السعة, ω التردد الزاوي, φ فرق الطور</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">فترة البندول البسيط:</div>
+                        T = 2π√(L/g)
+                        <div class="units">حيث L طول البندول</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">تأثير دوبلر:</div>
+                        f' = f(v ± v_observer)/(v ± v_source)
+                        <div class="units">حيث v سرعة الموجة</div>
+                    </div>
+                </div>
+                
+                <!-- البصريات -->
+                <div class="section">
+                    <h3>🔍 البصريات</h3>
+                    
+                    <div class="formula">
+                        <div class="formula-title">قانون الانكسار (سنيل):</div>
+                        n₁ sin θ₁ = n₂ sin θ₂
+                        <div class="units">حيث n معامل الانكسار, θ زاوية السقوط/الانكسار</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">معادلة العدسة الرقيقة:</div>
+                        1/f = 1/d_o + 1/d_i
+                        <div class="units">حيث f البعد البؤري, d_o المسافة الجسمية, d_i المسافة الخيالية</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">التكبير:</div>
+                        m = d_i/d_o = h_i/h_o
+                        <div class="units">حيث h الارتفاع</div>
+                    </div>
+                </div>
+                
+                <!-- الفيزياء الحديثة -->
+                <div class="section">
+                    <h3>⚛️ الفيزياء الحديثة</h3>
+                    
+                    <div class="formula">
+                        <div class="formula-title">معادلة أينشتاين للكتلة والطاقة:</div>
+                        E = mc²
+                        <div class="units">حيث c سرعة الضوء (3×10⁸ م/ث)</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">طاقة الفوتون:</div>
+                        E = hf = hc/λ
+                        <div class="units">حيث h ثابت بلانك (6.626×10⁻³⁴ ج.ث)</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">طول موجة دي برولي:</div>
+                        λ = h/p = h/(mv)
+                        <div class="units">للجسيمات المادية</div>
+                    </div>
+                    
+                    <div class="formula">
+                        <div class="formula-title">مبدأ عدم اليقين لهايزنبرغ:</div>
+                        Δx × Δp ≥ ℏ/2
+                        <div class="units">حيث ℏ = h/2π</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- الحاسبة -->
+            <div class="calculator">
+                <h3>🧮 الحاسبة الفيزيائية</h3>
+                
+                <div class="calc-section">
+                    <label>اختر نوع الحساب:</label>
+                    <select id="calculationType" onchange="showCalculator()">
+                        <option value="">-- اختر --</option>
+                        <option value="kinematics">معادلات الحركة</option>
+                        <option value="force">القوة والتسارع</option>
+                        <option value="energy">الطاقة والشغل</option>
+                        <option value="ohm">قانون أوم</option>
+                        <option value="power">القدرة الكهربائية</option>
+                        <option value="wave">سرعة الموجة</option>
+                        <option value="lens">معادلة العدسة</option>
+                        <option value="heat">السعة الحرارية</option>
+                    </select>
+                </div>
+                
+                <div id="calculatorInputs"></div>
+                
+                <button class="calc-btn" onclick="calculate()">احسب</button>
+                
+                <div id="result" class="result">النتيجة ستظهر هنا</div>
+                
+                <div class="constants">
+                    <h4>الثوابت الفيزيائية:</h4>
+                    <div class="constant">g = 9.8 م/ث² (التسارع الأرضي)</div>
+                    <div class="constant">c = 3×10⁸ م/ث (سرعة الضوء)</div>
+                    <div class="constant">h = 6.626×10⁻³⁴ ج.ث (ثابت بلانك)</div>
+                    <div class="constant">k = 9×10⁹ ن.م²/ك² (ثابت كولوم)</div>
+                    <div class="constant">R = 8.314 ج/مول.ك (ثابت الغازات)</div>
+                    <div class="constant">e = 1.602×10⁻¹⁹ ك (شحنة الإلكترون)</div>
+                    <div class="constant">m_e = 9.109×10⁻³¹ كجم (كتلة الإلكترون)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showCalculator() {
+            const type = document.getElementById('calculationType').value;
+            const inputsDiv = document.getElementById('calculatorInputs');
+            
+            let html = '';
+            
+            switch(type) {
+                case 'kinematics':
+                    html = `
+                        <div class="calc-section">
+                            <label>السرعة الابتدائية (u) م/ث:</label>
+                            <input type="number" id="u" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>التسارع (a) م/ث²:</label>
+                            <input type="number" id="a" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>الزمن (t) ث:</label>
+                            <input type="number" id="t" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'force':
+                    html = `
+                        <div class="calc-section">
+                            <label>الكتلة (m) كجم:</label>
+                            <input type="number" id="mass" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>التسارع (a) م/ث²:</label>
+                            <input type="number" id="acceleration" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'energy':
+                    html = `
+                        <div class="calc-section">
+                            <label>الكتلة (m) كجم:</label>
+                            <input type="number" id="mass_e" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>السرعة (v) م/ث:</label>
+                            <input type="number" id="velocity" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>الارتفاع (h) م:</label>
+                            <input type="number" id="height" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'ohm':
+                    html = `
+                        <div class="calc-section">
+                            <label>الجهد (V) فولت:</label>
+                            <input type="number" id="voltage" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>التيار (I) أمبير:</label>
+                            <input type="number" id="current" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>المقاومة (R) أوم:</label>
+                            <input type="number" id="resistance" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'power':
+                    html = `
+                        <div class="calc-section">
+                            <label>الجهد (V) فولت:</label>
+                            <input type="number" id="voltage_p" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>التيار (I) أمبير:</label>
+                            <input type="number" id="current_p" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'wave':
+                    html = `
+                        <div class="calc-section">
+                            <label>التردد (f) هرتز:</label>
+                            <input type="number" id="frequency" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>الطول الموجي (λ) متر:</label>
+                            <input type="number" id="wavelength" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'lens':
+                    html = `
+                        <div class="calc-section">
+                            <label>البعد البؤري (f) سم:</label>
+                            <input type="number" id="focal" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>المسافة الجسمية (d_o) سم:</label>
+                            <input type="number" id="object_distance" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'heat':
+                    html = `
+                        <div class="calc-section">
+                            <label>الكتلة (m) كجم:</label>
+                            <input type="number" id="mass_h" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>السعة الحرارية النوعية (c) ج/كجم.ك:</label>
+                            <input type="number" id="specific_heat" step="any" value="4186">
+                        </div>
+                        <div class="calc-section">
+                            <label>تغير الحرارة (ΔT) ك:</label>
+                            <input type="number" id="temp_change" step="any">
+                        </div>
+                    `;
+                    break;
+            }
+            
+            inputsDiv.innerHTML = html;
+        }
+        
+        function calculate() {
+            const type = document.getElementById('calculationType').value;
+            const resultDiv = document.getElementById('result');
+            
+            let result = '';
+            
+            try {
+                switch(type) {
+                    case 'kinematics':
+                        const u = parseFloat(document.getElementById('u').value) || 0;
+                        const a = parseFloat(document.getElementById('a').value) || 0;
+                        const t = parseFloat(document.getElementById('t').value) || 0;
+                        
+                        const v = u + a * t;
+                        const s = u * t + 0.5 * a * t * t;
+                        
+                        result = `السرعة النهائية: ${v.toFixed(2)} م/ث<br>المسافة: ${s.toFixed(2)} متر`;
+                        break;
+                        
+                    case 'force':
+                        const mass = parseFloat(document.getElementById('mass').value);
+                        const acceleration = parseFloat(document.getElementById('acceleration').value);
+                        
+                        if (mass && acceleration) {
+                            const force = mass * acceleration;
+                            result = `القوة = ${force.toFixed(2)} نيوتن`;
+                        }
+                        break;
+                        
+                    case 'energy':
+                        const mass_e = parseFloat(document.getElementById('mass_e').value);
+                        const velocity = parseFloat(document.getElementById('velocity').value);
+                        const height = parseFloat(document.getElementById('height').value);
+                        
+                        let energyResult = '';
+                        if (mass_e && velocity) {
+                            const ke = 0.5 * mass_e * velocity * velocity;
+                            energyResult += `الطاقة الحركية: ${ke.toFixed(2)} جول<br>`;
+                        }
+                        if (mass_e && height) {
+                            const pe = mass_e * 9.8 * height;
+                            energyResult += `الطاقة الكامنة: ${pe.toFixed(2)} جول`;
+                        }
+                        result = energyResult;
+                        break;
+                        
+                    case 'ohm':
+                        const voltage = parseFloat(document.getElementById('voltage').value);
+                        const current = parseFloat(document.getElementById('current').value);
+                        const resistance = parseFloat(document.getElementById('resistance').value);
+                        
+                        if (voltage && current) {
+                            const r = voltage / current;
+                            result = `المقاومة = ${r.toFixed(2)} أوم`;
+                        } else if (voltage && resistance) {
+                            const i = voltage / resistance;
+                            result = `التيار = ${i.toFixed(2)} أمبير`;
+                        } else if (current && resistance) {
+                            const v = current * resistance;
+                            result = `الجهد = ${v.toFixed(2)} فولت`;
+                        }
+                        break;
+                        
+                    case 'power':
+                        const voltage_p = parseFloat(document.getElementById('voltage_p').value);
+                        const current_p = parseFloat(document.getElementById('current_p').value);
+                        
+                        if (voltage_p && current_p) {
+                            const power = voltage_p * current_p;
+                            result = `القدرة = ${power.toFixed(2)} واط`;
+                        }
+                        break;
+                        
+                    case 'wave':
+                        const frequency = parseFloat(document.getElementById('frequency').value);
+                        const wavelength = parseFloat(document.getElementById('wavelength').value);
+                        
+                        if (frequency && wavelength) {
+                            const speed = frequency * wavelength;
+                            result = `سرعة الموجة = ${speed.toFixed(2)} م/ث`;
+                        } else if (frequency) {
+                            const wl = 3e8 / frequency;
+                            result = `الطول الموجي = ${wl.toFixed(2)} متر (للضوء)`;
+                        }
+                        break;
+                        
+                    case 'lens':
+                        const focal = parseFloat(document.getElementById('focal').value);
+                        const object_distance = parseFloat(document.getElementById('object_distance').value);
+                        
+                        if (focal && object_distance) {
+                            const image_distance = 1 / ((1 / focal) - (1 / object_distance));
+                            const magnification = -image_distance / object_distance;
+                            result = `المسافة الخيالية = ${image_distance.toFixed(2)} سم<br>التكبير = ${magnification.toFixed(2)}`;
+                        }
+                        break;
+                        
+                    case 'heat':
+                        const mass_h = parseFloat(document.getElementById('mass_h').value);
+                        const specific_heat = parseFloat(document.getElementById('specific_heat').value);
+                        const temp_change = parseFloat(document.getElementById('temp_change').value);
+                        
+                        if (mass_h && specific_heat && temp_change) {
+                            const heat = mass_h * specific_heat * temp_change;
+                            result = `كمية الحرارة = ${heat.toFixed(2)} جول`;
+                        }
+                        break;
+                        
+                    default:
+                        result = 'يرجى اختيار نوع الحساب أولاً';
+                }
+                
+                if (!result) {
+                    result = 'يرجى إدخال جميع القيم المطلوبة';
+                }
+                
+            } catch (error) {
+                result = 'خطأ في الحساب - تأكد من إدخال قيم صحيحة';
+            }
+            
+            resultDiv.innerHTML = result;
+        }
+        
+        // إضافة المزيد من الحاسبات المتخصصة
+        function addAdvancedCalculators() {
+            const select = document.getElementById('calculationType');
+            const advancedOptions = [
+                {value: 'momentum', text: 'الزخم والاصطدام'},
+                {value: 'circular', text: 'الحركة الدائرية'},
+                {value: 'gravity', text: 'الجاذبية'},
+                {value: 'pressure', text: 'الضغط والموائع'},
+                {value: 'capacitor', text: 'المكثفات'},
+                {value: 'photon', text: 'طاقة الفوتون'},
+                {value: 'pendulum', text: 'البندول البسيط'},
+                {value: 'doppler', text: 'تأثير دوبلر'}
+            ];
+            
+            advancedOptions.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option.value;
+                optionElement.textContent = option.text;
+                select.appendChild(optionElement);
+            });
+        }
+        
+        // تحديث دالة showCalculator لتشمل الحاسبات الجديدة
+        const originalShowCalculator = showCalculator;
+        showCalculator = function() {
+            const type = document.getElementById('calculationType').value;
+            const inputsDiv = document.getElementById('calculatorInputs');
+            
+            let html = '';
+            
+            // الحاسبات الأساسية
+            if (['kinematics', 'force', 'energy', 'ohm', 'power', 'wave', 'lens', 'heat'].includes(type)) {
+                return originalShowCalculator();
+            }
+            
+            // الحاسبات المتقدمة
+            switch(type) {
+                case 'momentum':
+                    html = `
+                        <div class="calc-section">
+                            <label>الكتلة الأولى (m₁) كجم:</label>
+                            <input type="number" id="m1" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>السرعة الأولى (v₁) م/ث:</label>
+                            <input type="number" id="v1" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>الكتلة الثانية (m₂) كجم:</label>
+                            <input type="number" id="m2" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>السرعة الثانية (v₂) م/ث:</label>
+                            <input type="number" id="v2" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'circular':
+                    html = `
+                        <div class="calc-section">
+                            <label>الكتلة (m) كجم:</label>
+                            <input type="number" id="mass_c" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>السرعة (v) م/ث:</label>
+                            <input type="number" id="velocity_c" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>نصف القطر (r) متر:</label>
+                            <input type="number" id="radius" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'gravity':
+                    html = `
+                        <div class="calc-section">
+                            <label>الكتلة الأولى (m₁) كجم:</label>
+                            <input type="number" id="mass1_g" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>الكتلة الثانية (m₂) كجم:</label>
+                            <input type="number" id="mass2_g" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>المسافة (r) متر:</label>
+                            <input type="number" id="distance_g" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'pressure':
+                    html = `
+                        <div class="calc-section">
+                            <label>القوة (F) نيوتن:</label>
+                            <input type="number" id="force_p" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>المساحة (A) م²:</label>
+                            <input type="number" id="area" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>الكثافة (ρ) كجم/م³:</label>
+                            <input type="number" id="density" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>الارتفاع (h) متر:</label>
+                            <input type="number" id="height_p" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'capacitor':
+                    html = `
+                        <div class="calc-section">
+                            <label>الشحنة (Q) كولوم:</label>
+                            <input type="number" id="charge" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>الجهد (V) فولت:</label>
+                            <input type="number" id="voltage_cap" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>السعة (C) فاراد:</label>
+                            <input type="number" id="capacitance" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'photon':
+                    html = `
+                        <div class="calc-section">
+                            <label>التردد (f) هرتز:</label>
+                            <input type="number" id="freq_photon" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>الطول الموجي (λ) متر:</label>
+                            <input type="number" id="wavelength_photon" step="any">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'pendulum':
+                    html = `
+                        <div class="calc-section">
+                            <label>طول البندول (L) متر:</label>
+                            <input type="number" id="length_pendulum" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>التسارع الأرضي (g) م/ث²:</label>
+                            <input type="number" id="gravity_pendulum" step="any" value="9.8">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'doppler':
+                    html = `
+                        <div class="calc-section">
+                            <label>التردد الأصلي (f) هرتز:</label>
+                            <input type="number" id="original_freq" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>سرعة الموجة (v) م/ث:</label>
+                            <input type="number" id="wave_speed" step="any" value="343">
+                        </div>
+                        <div class="calc-section">
+                            <label>سرعة المصدر (v_s) م/ث:</label>
+                            <input type="number" id="source_speed" step="any">
+                        </div>
+                        <div class="calc-section">
+                            <label>سرعة المراقب (v_o) م/ث:</label>
+                            <input type="number" id="observer_speed" step="any">
+                        </div>
+                    `;
+                    break;
+            }
+            
+            inputsDiv.innerHTML = html;
+        };
+        
+        // تحديث دالة calculate
+        const originalCalculate = calculate;
+        calculate = function() {
+            const type = document.getElementById('calculationType').value;
+            const resultDiv = document.getElementById('result');
+            
+            // الحاسبات الأساسية
+            if (['kinematics', 'force', 'energy', 'ohm', 'power', 'wave', 'lens', 'heat'].includes(type)) {
+                return originalCalculate();
+            }
+            
+            let result = '';
+            
+            try {
+                switch(type) {
+                    case 'momentum':
+                        const m1 = parseFloat(document.getElementById('m1').value);
+                        const v1 = parseFloat(document.getElementById('v1').value);
+                        const m2 = parseFloat(document.getElementById('m2').value);
+                        const v2 = parseFloat(document.getElementById('v2').value);
+                        
+                        if (m1 && v1) {
+                            const p1 = m1 * v1;
+                            result += `الزخم الأول = ${p1.toFixed(2)} كجم.م/ث<br>`;
+                        }
+                        if (m2 && v2) {
+                            const p2 = m2 * v2;
+                            result += `الزخم الثاني = ${p2.toFixed(2)} كجم.م/ث<br>`;
+                        }
+                        if (m1 && v1 && m2 && v2) {
+                            const totalMomentum = (m1 * v1) + (m2 * v2);
+                            result += `الزخم الكلي = ${totalMomentum.toFixed(2)} كجم.م/ث`;
+                        }
+                        break;
+                        
+                    case 'circular':
+                        const mass_c = parseFloat(document.getElementById('mass_c').value);
+                        const velocity_c = parseFloat(document.getElementById('velocity_c').value);
+                        const radius = parseFloat(document.getElementById('radius').value);
+                        
+                        if (mass_c && velocity_c && radius) {
+                            const centripetal_force = (mass_c * velocity_c * velocity_c) / radius;
+                            const centripetal_acc = (velocity_c * velocity_c) / radius;
+                            const angular_velocity = velocity_c / radius;
+                            result = `القوة المركزية = ${centripetal_force.toFixed(2)} نيوتن<br>التسارع المركزي = ${centripetal_acc.toFixed(2)} م/ث²<br>السرعة الزاوية = ${angular_velocity.toFixed(2)} راد/ث`;
+                        }
+                        break;
+                        
+                    case 'gravity':
+                        const mass1_g = parseFloat(document.getElementById('mass1_g').value);
+                        const mass2_g = parseFloat(document.getElementById('mass2_g').value);
+                        const distance_g = parseFloat(document.getElementById('distance_g').value);
+                        
+                        if (mass1_g && mass2_g && distance_g) {
+                            const G = 6.674e-11; // ثابت الجاذبية
+                            const force_gravity = (G * mass1_g * mass2_g) / (distance_g * distance_g);
+                            result = `قوة الجاذبية = ${force_gravity.toExponential(2)} نيوتن`;
+                        }
+                        break;
+                        
+                    case 'pressure':
+                        const force_p = parseFloat(document.getElementById('force_p').value);
+                        const area = parseFloat(document.getElementById('area').value);
+                        const density = parseFloat(document.getElementById('density').value);
+                        const height_p = parseFloat(document.getElementById('height_p').value);
+                        
+                        if (force_p && area) {
+                            const pressure1 = force_p / area;
+                            result += `الضغط = ${pressure1.toFixed(2)} باسكال<br>`;
+                        }
+                        if (density && height_p) {
+                            const pressure2 = density * 9.8 * height_p;
+                            result += `ضغط المائع = ${pressure2.toFixed(2)} باسكال`;
+                        }
+                        break;
+                        
+                    case 'capacitor':
+                        const charge = parseFloat(document.getElementById('charge').value);
+                        const voltage_cap = parseFloat(document.getElementById('voltage_cap').value);
+                        const capacitance = parseFloat(document.getElementById('capacitance').value);
+                        
+                        if (charge && voltage_cap) {
+                            const cap = charge / voltage_cap;
+                            result += `السعة = ${cap.toExponential(2)} فاراد<br>`;
+                        }
+                        if (capacitance && voltage_cap) {
+                            const q = capacitance * voltage_cap;
+                            const energy = 0.5 * capacitance * voltage_cap * voltage_cap;
+                            result += `الشحنة = ${q.toExponential(2)} كولوم<br>طاقة المكثف = ${energy.toExponential(2)} جول`;
+                        }
+                        break;
+                        
+                    case 'photon':
+                        const freq_photon = parseFloat(document.getElementById('freq_photon').value);
+                        const wavelength_photon = parseFloat(document.getElementById('wavelength_photon').value);
+                        
+                        const h = 6.626e-34; // ثابت بلانك
+                        const c = 3e8; // سرعة الضوء
+                        
+                        if (freq_photon) {
+                            const energy_photon = h * freq_photon;
+                            const wl = c / freq_photon;
+                            result = `طاقة الفوتون = ${energy_photon.toExponential(2)} جول<br>الطول الموجي = ${wl.toExponential(2)} متر`;
+                        } else if (wavelength_photon) {
+                            const freq = c / wavelength_photon;
+                            const energy_photon = h * freq;
+                            result = `التردد = ${freq.toExponential(2)} هرتز<br>طاقة الفوتون = ${energy_photon.toExponential(2)} جول`;
+                        }
+                        break;
+                        
+                    case 'pendulum':
+                        const length_pendulum = parseFloat(document.getElementById('length_pendulum').value);
+                        const gravity_pendulum = parseFloat(document.getElementById('gravity_pendulum').value);
+                        
+                        if (length_pendulum && gravity_pendulum) {
+                            const period = 2 * Math.PI * Math.sqrt(length_pendulum / gravity_pendulum);
+                            const frequency_pendulum = 1 / period;
+                            result = `الدورة الزمنية = ${period.toFixed(2)} ثانية<br>التردد = ${frequency_pendulum.toFixed(2)} هرتز`;
+                        }
+                        break;
+                        
+                    case 'doppler':
+                        const original_freq = parseFloat(document.getElementById('original_freq').value);
+                        const wave_speed = parseFloat(document.getElementById('wave_speed').value);
+                        const source_speed = parseFloat(document.getElementById('source_speed').value) || 0;
+                        const observer_speed = parseFloat(document.getElementById('observer_speed').value) || 0;
+                        
+                        if (original_freq && wave_speed) {
+                            const observed_freq = original_freq * (wave_speed + observer_speed) / (wave_speed - source_speed);
+                            const freq_change = observed_freq - original_freq;
+                            result = `التردد المرصود = ${observed_freq.toFixed(2)} هرتز<br>تغير التردد = ${freq_change.toFixed(2)} هرتز`;
+                        }
+                        break;
+                        
+                    default:
+                        result = 'يرجى اختيار نوع الحساب أولاً';
+                }
+                
+                if (!result) {
+                    result = 'يرجى إدخال جميع القيم المطلوبة';
+                }
+                
+            } catch (error) {
+                result = 'خطأ في الحساب - تأكد من إدخال قيم صحيحة';
+            }
+            
+            resultDiv.innerHTML = result;
+        };
+        
+        // تشغيل الحاسبات المتقدمة عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', addAdvancedCalculators);
+    </script>
+</body>
+</html>
+                            
